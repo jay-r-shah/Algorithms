@@ -10,7 +10,7 @@ namespace Algorithms
     {
         static void Main(string[] args)
         {
-            Console.Write("Hello world!");
+            Console.Write("Hello from the other side!");
             Console.Read();
         }
     }
