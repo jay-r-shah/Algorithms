@@ -9,59 +9,65 @@ namespace Algorithms
 {
     class Program
     {
+        /// <summary>
+        /// Karatsuba multiplication. Enter the two integers to be multiplied as command line arguments.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Console.Write(Multiply("125","15"));
+            Console.Write("Karatsuba Algorithm: ");
+            Console.Write(Multiply(args[0],args[1]));
+            Console.Write("\nActual value: ");
+            Console.Write(Convert.ToInt64(args[0]) * Convert.ToInt64(args[1]));
+            Console.Write("\nPress any key to continue...");
             Console.Read();
         }
 
         private static string Multiply(string X, string Y)
         {
-            if (X.Length <= 1 && Y.Length<=1)
+            if (X.Length != Y.Length)
             {
-                if (String.IsNullOrEmpty(X))
-                {
-                    X = "0";
-                }
-
-                if (String.IsNullOrEmpty(Y))
-                {
-                    Y = "0";
-                }
-                return Convert.ToString(Convert.ToInt32(X) * Convert.ToInt32(Y));
+                // if the lengths of the numbers are different, pad the shorter number with 0s
+                if (X.Length < Y.Length)
+                    X = string.Concat(Enumerable.Repeat('0', Y.Length - X.Length)) + X;
+                else
+                    Y = string.Concat(Enumerable.Repeat('0', X.Length - Y.Length)) + Y;
             }
 
 
-            string A = string.IsNullOrEmpty(X.Substring(0, X.Length / 2)) ? "0" : X.Substring(0, X.Length / 2);
-            string B = string.IsNullOrEmpty(X.Substring(A.Length)) ? "0" : X.Substring(A.Length);
-            string C = string.IsNullOrEmpty(Y.Substring(0, Y.Length / 2)) ? "0" : Y.Substring(0, Y.Length / 2);
-            string D = string.IsNullOrEmpty(Y.Substring(C.Length)) ? "0" : Y.Substring(C.Length);
+            // Base case
+            if (X.Length == 1 && Y.Length == 1)
+                return Convert.ToString(Convert.ToInt32(X) * Convert.ToInt32(Y));
 
+            int n = X.Length;
 
+            string A = X.Substring(0, n / 2);
+            string B = X.Substring(A.Length);
+            string C = Y.Substring(0, n / 2);
+            string D = Y.Substring(C.Length);
 
+            // STEP I
             string AC = Multiply(A, C);
+
+            // STEP II
             string BD = Multiply(B, D);
 
             BigInteger AplB = BigInteger.Parse(A) + BigInteger.Parse(B);
             BigInteger CplD = BigInteger.Parse(C) + BigInteger.Parse(D);
 
+            // STEP III
             string AplBtimesCplD = Multiply(Convert.ToString(AplB),Convert.ToString(CplD));
 
             string ADplBC = Convert.ToString(BigInteger.Parse(AplBtimesCplD) - BigInteger.Parse(AC) - BigInteger.Parse(BD));
 
-            string term1 = AC + string.Concat(Enumerable.Repeat('0', X.Length));
-            string term2 = ADplBC + string.Concat(Enumerable.Repeat('0', X.Length / 2));
+            // Pad with 0's at the end
+            string term1 = AC + string.Concat(Enumerable.Repeat('0', ((n + 1) / 2) * 2));
+            string term2 = ADplBC + string.Concat(Enumerable.Repeat('0', (n + 1) / 2));
             string term3 = BD;
 
             BigInteger product = BigInteger.Parse(term1) + BigInteger.Parse(term2) + BigInteger.Parse(term3);
 
             return Convert.ToString(product);
-
-            //string AplB = Convert.ToString(Numerics.B)
-            //string ApB = Convert.ToString()
-            //string ApBtimesCpD = Multiply()
-
-            return null;
         }
     }
 }
