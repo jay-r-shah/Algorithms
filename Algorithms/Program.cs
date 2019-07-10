@@ -15,10 +15,21 @@ namespace Algorithms
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Console.Write("Karatsuba Algorithm: ");
-            Console.Write(Multiply(args[0],args[1]));
-            Console.Write("\nActual value: ");
-            Console.Write(Convert.ToInt64(args[0]) * Convert.ToInt64(args[1]));
+            Console.Write("Karatsuba Algorithm:\t");
+            string karatsuba = Multiply(args[0], args[1]);
+            Console.Write(karatsuba);
+
+            try
+            {
+                string actual = Convert.ToString(Convert.ToInt64(args[0]) * Convert.ToInt64(args[1]));
+                Console.Write("\nActual value:\t\t");
+                Console.Write(actual);
+            }
+            catch (Exception ex)
+            {
+                // Assuming exception is because of large input
+                Console.Write("\nInput too large to calculate actual");
+            }
             Console.Write("\nPress any key to continue...");
             Console.Read();
         }
@@ -52,6 +63,7 @@ namespace Algorithms
             // STEP II
             string BD = Multiply(B, D);
 
+            // Convert to BigInteger to be able to add
             BigInteger AplB = BigInteger.Parse(A) + BigInteger.Parse(B);
             BigInteger CplD = BigInteger.Parse(C) + BigInteger.Parse(D);
 
