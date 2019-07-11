@@ -10,6 +10,8 @@ namespace Algorithms
     class Program
     {
         /// <summary>
+        /// Solution to Week 1 Assignment of Coursera Algorithms specialization
+        /// -------------------------------------------------------------------
         /// Karatsuba multiplication. Enter the two integers to be multiplied as command line arguments.
         /// </summary>
         /// <param name="args"></param>
