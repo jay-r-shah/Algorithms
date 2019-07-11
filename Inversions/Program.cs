@@ -8,8 +8,68 @@ namespace Inversions
 {
     class Program
     {
+        /// <summary>
+        /// Solution to Week 2 assignment of Coursera Algorithms specialization
+        /// -------------------------------------------------------------------
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
+            double[] A = new double[5] { 1, 4, 8, 12, 13 };
+            double[] B = new double[5] { 2, 3, 8, 15, 19 };
+            Console.WriteLine("[{0}]", string.Join(", ", Merge(A, B)));
+            Console.Read();
+        }
+
+        private static double[] Merge(double[] A, double[] B)
+        {
+            double[] MergedArray = new double[A.Count() + B.Count()];
+
+            int j = 0;
+            int k = 0;
+            for (int i = 0; i < MergedArray.Count(); i++)
+            {
+                if (j == A.Count())
+                {
+                    for (int l = i; l < MergedArray.Count(); l++)
+                    {
+                        MergedArray[l] = B[k];
+                        k++;
+                    }
+                    break;
+                }
+
+                if (k == B.Count())
+                {
+                    for (int l = i; l < MergedArray.Count(); l++)
+                    {
+                        MergedArray[l] = A[j];
+                        j++;
+                    }
+                    break;
+                }
+
+                if (A[j] < B[k])
+                {
+                    MergedArray[i] = A[j];
+                    j++;
+                }
+                else if (B[k] < A[j])
+                {
+                    MergedArray[i] = B[k];
+                    k++;
+                }
+                else if(A[j] == B[k])
+                {
+                    MergedArray[i] = A[j];
+                    MergedArray[i + 1] = B[k];
+                    j++;
+                    k++;
+                    i++;
+                }
+            }
+
+            return MergedArray;
         }
     }
 }
