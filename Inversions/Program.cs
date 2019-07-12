@@ -69,6 +69,7 @@ namespace Inversions
                     j++;
                     k++;
                     i++;
+                    nSplitInv += A.Count() - j;
                 }
             }
 
