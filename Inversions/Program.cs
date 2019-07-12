@@ -17,16 +17,18 @@ namespace Inversions
         {
             double[] A = new double[5] { 1, 4, 8, 12, 13 };
             double[] B = new double[5] { 2, 3, 8, 15, 19 };
-            Console.WriteLine("[{0}]", string.Join(", ", Merge(A, B)));
+            Console.WriteLine("Merged array: [{0}]\n", string.Join(", ", MergeAndCountSplitInv(A, B, out int nSplitInv)));
+            Console.Write("Number of inversions: {0}", nSplitInv.ToString());
             Console.Read();
         }
 
-        private static double[] Merge(double[] A, double[] B)
+        private static double[] MergeAndCountSplitInv(double[] A, double[] B, out int nSplitInv)
         {
             double[] MergedArray = new double[A.Count() + B.Count()];
 
             int j = 0;
             int k = 0;
+            nSplitInv = 0;
             for (int i = 0; i < MergedArray.Count(); i++)
             {
                 if (j == A.Count())
@@ -57,9 +59,10 @@ namespace Inversions
                 else if (B[k] < A[j])
                 {
                     MergedArray[i] = B[k];
+                    nSplitInv += A.Count() - j;
                     k++;
                 }
-                else if(A[j] == B[k])
+                else if (A[j] == B[k])
                 {
                     MergedArray[i] = A[j];
                     MergedArray[i + 1] = B[k];
