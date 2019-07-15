@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E76F7F6F-F098-4B41-922E-68D321D4E48D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Algorithms</RootNamespace>
+    <RootNamespace>IntegerMultiplication</RootNamespace>
     <AssemblyName>IntegerMultiplication</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegerMultiplication", "Algorithms\IntegerMultiplication.csproj", "{E76F7F6F-F098-4B41-922E-68D321D4E48D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inversions", "Inversions\Inversions.csproj", "{E1569FEA-C1C8-4B99-A0C2-56E8E4E45B21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegerMultiplication", "IntegerMultiplication\IntegerMultiplication.csproj", "{E76F7F6F-F098-4B41-922E-68D321D4E48D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E1569FEA-C1C8-4B99-A0C2-56E8E4E45B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E1569FEA-C1C8-4B99-A0C2-56E8E4E45B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1569FEA-C1C8-4B99-A0C2-56E8E4E45B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1569FEA-C1C8-4B99-A0C2-56E8E4E45B21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E76F7F6F-F098-4B41-922E-68D321D4E48D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
