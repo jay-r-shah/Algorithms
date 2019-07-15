@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,19 +11,41 @@ namespace Inversions
     {
         /// <summary>
         /// Solution to Week 2 assignment of Coursera Algorithms specialization
+        /// 
+        /// Compute the number of inversions in the given text file.
         /// -------------------------------------------------------------------
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            double[] A = new double[5] { 1, 4, 8, 12, 13 };
-            double[] B = new double[5] { 2, 3, 8, 15, 19 };
-            Console.WriteLine("Merged array: [{0}]\n", string.Join(", ", MergeAndCountSplitInv(A, B, out int nSplitInv)));
-            Console.Write("Number of inversions: {0}", nSplitInv.ToString());
+            double[] A = System.IO.File.ReadAllLines(args[0]).Select<string, double>(s => Double.Parse(s)).ToArray<double>();
+            Console.WriteLine("Merged array: [{0}]\n", string.Join(", ", SortAndCount(A, out BigInteger nInversions)));
+            Console.Write("Number of inversions: {0}", nInversions.ToString());
             Console.Read();
         }
 
-        private static double[] MergeAndCountSplitInv(double[] A, double[] B, out int nSplitInv)
+        private static double[] SortAndCount(double[] A, out BigInteger nInversions)
+        {
+            int n = A.Count();
+            nInversions = 0;
+            if (n == 1)
+            {
+                return A;
+            }
+            // First half of A
+            double[] A0 = A.Take(n / 2).ToArray();
+            // Second half of A
+            double[] A1 = A.Skip(n / 2).ToArray();
+
+            double[] B = SortAndCount(A0, out BigInteger X);
+            double[] C = SortAndCount(A1, out BigInteger Y);
+            double[] D = MergeAndCountSplitInv(B, C, out BigInteger Z);
+
+            nInversions = X + Y + Z;
+            return D;
+        }
+
+        private static double[] MergeAndCountSplitInv(double[] A, double[] B, out BigInteger nSplitInv)
         {
             double[] MergedArray = new double[A.Count() + B.Count()];
 
