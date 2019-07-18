@@ -27,7 +27,7 @@ namespace Algorithms
                 Console.Write("\nActual value:\t\t");
                 Console.Write(actual);
             }
-            catch (Exception ex)
+            catch
             {
                 // Assuming exception is because of large input
                 Console.Write("\nInput too large to calculate actual");
