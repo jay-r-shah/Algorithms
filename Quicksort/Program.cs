@@ -9,7 +9,10 @@ namespace Quicksort
     class Program
     {
         private static Random rand = new Random();
-
+        private static int nComparisions = 0;
+        private static int totalComp = 0;
+        private enum PivotMethod { First, Last, MedianOfThree, Random };
+        private static PivotMethod _pivotMethod = PivotMethod.MedianOfThree;
         /// <summary>
         /// Solution to Week 3 assignment of Coursera Algorithms specialization
         /// 
@@ -18,12 +21,24 @@ namespace Quicksort
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            double[] A = new double[12] { 3, 8, 2, 5, 1, 4, 7, 6, 4, 4, 6, 3 };
-            //double[] A = new double[2] { 1, 2 };
             //double[] A = System.IO.File.ReadAllLines(args[0]).Select<string, double>(s => Double.Parse(s)).ToArray<double>();
+            double[] A = new double[8] { 8, 1, 3, 4, 5, 2, 7, 6 };
             double[] B = QuickSort(A);
-            Console.WriteLine("Merged array: [{0}]\n", string.Join(", ", B));
+            Console.WriteLine("Sorted array: [{0}]\n", string.Join(", ", B));
+            Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
+            Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
+            Console.WriteLine("Number of comparisions: {0}", Convert.ToString(totalComp));
             Console.Read();
+            //_pivotMethod = PivotMethod.Last; nComparisions = 0; QuickSort(A);
+            //Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
+            //Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
+            //_pivotMethod = PivotMethod.MedianOfThree; nComparisions = 0; QuickSort(A);
+            //Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
+            //Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
+            //_pivotMethod = PivotMethod.Random; nComparisions = 0; QuickSort(A);
+            //Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
+            //Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
+            //Console.Read();
         }
 
         private static double[] QuickSort(double[] A)
@@ -31,6 +46,7 @@ namespace Quicksort
             int n = A.Count();
             if (n < 1)
                 return A;
+            nComparisions += (n - 1);
 
             int p = SelectPivotElement(A);
             int pivotIndex;
@@ -66,6 +82,7 @@ namespace Quicksort
             int r = A.Count();
             for (int j = l + 1; j < r; j++) // boundary between what you've seen and what you haven't
             {
+                totalComp += 1;
                 if (A[j] < pivotElement)
                 {
                     double temp0 = A[j];
@@ -84,8 +101,52 @@ namespace Quicksort
 
         private static int SelectPivotElement(double[] A)
         {
-            return rand.Next(A.Count());
-            //return 0;
+            switch (_pivotMethod)
+            {
+                case PivotMethod.First:
+                    return 0;
+                case PivotMethod.Last:
+                    return A.Count() - 1;
+                case PivotMethod.MedianOfThree:
+                    if (A.Count() < 2)
+                    {
+                        return 0;
+                    }
+
+                    if (A.Count() == 2)
+                    {
+                        if (A.First() <= A.Last())
+                        {
+                            return 0;
+                        }
+                        else
+                        {
+                            return 1;
+                        }
+                    }
+                    double first = A.First();
+                    double last = A.Last();
+                    double middle = A[(2 * A.Count() + 1) / 4];
+
+                    double[] x = new double[3] { first, last, middle };
+                    int median = 0;
+
+                    if ((last > first && last < middle) || (last < first && last > middle))
+                    {
+                        median = A.Count() - 1;
+                    }
+
+                    if ((middle > first && middle < last) || (middle < first && middle > last))
+                    {
+                        median = (2 * A.Count() + 1) / 4;
+                    }
+
+                    return median;
+                case PivotMethod.Random:
+                    return rand.Next(A.Count());
+                default:
+                    return 0;
+            }
         }
     }
 }
