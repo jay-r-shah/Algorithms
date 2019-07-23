@@ -15,30 +15,18 @@ namespace Quicksort
         private static PivotMethod _pivotMethod = PivotMethod.MedianOfThree;
         /// <summary>
         /// Solution to Week 3 assignment of Coursera Algorithms specialization
-        /// 
+        /// Find number of comparisions required for QuickSort Algorithm
         /// -------------------------------------------------------------------
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            //double[] A = System.IO.File.ReadAllLines(args[0]).Select<string, double>(s => Double.Parse(s)).ToArray<double>();
-            double[] A = new double[8] { 8, 1, 3, 4, 5, 2, 7, 6 };
+            double[] A = System.IO.File.ReadAllLines(args[0]).Select<string, double>(s => Double.Parse(s)).ToArray<double>();
             double[] B = QuickSort(A);
             Console.WriteLine("Sorted array: [{0}]\n", string.Join(", ", B));
             Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
             Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
-            Console.WriteLine("Number of comparisions: {0}", Convert.ToString(totalComp));
             Console.Read();
-            //_pivotMethod = PivotMethod.Last; nComparisions = 0; QuickSort(A);
-            //Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
-            //Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
-            //_pivotMethod = PivotMethod.MedianOfThree; nComparisions = 0; QuickSort(A);
-            //Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
-            //Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
-            //_pivotMethod = PivotMethod.Random; nComparisions = 0; QuickSort(A);
-            //Console.WriteLine("Pivot method: {0}", _pivotMethod.ToString());
-            //Console.WriteLine("Number of comparisions: {0}", Convert.ToString(nComparisions));
-            //Console.Read();
         }
 
         private static double[] QuickSort(double[] A)
@@ -126,20 +114,16 @@ namespace Quicksort
                     }
                     double first = A.First();
                     double last = A.Last();
-                    double middle = A[(2 * A.Count() + 1) / 4];
+                    double middle = A[(2 * A.Count() - 1) / 4];
 
                     double[] x = new double[3] { first, last, middle };
                     int median = 0;
 
                     if ((last > first && last < middle) || (last < first && last > middle))
-                    {
                         median = A.Count() - 1;
-                    }
 
                     if ((middle > first && middle < last) || (middle < first && middle > last))
-                    {
-                        median = (2 * A.Count() + 1) / 4;
-                    }
+                        median = (2 * A.Count() - 1) / 4;
 
                     return median;
                 case PivotMethod.Random:
