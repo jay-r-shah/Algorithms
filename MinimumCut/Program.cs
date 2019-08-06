@@ -14,8 +14,8 @@ namespace MinimumCut
         /// <summary>
         /// Solution to Week 4 assignment of Coursera Algorithms specialization
         /// 
-        /// Compute the minimum number of cuts
-        /// -------------------------------------------------------------------
+        /// Compute the minimum cut of a graph using Karger's (Random Contraction) Algorithm
+        /// --------------------------------------------------------------------------------
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -23,7 +23,7 @@ namespace MinimumCut
             List<string> input = System.IO.File.ReadAllLines(args[0]).ToList();
             Graph = new Dictionary<int, List<int>>();
             
-            // Assume input graph is valid
+            // Assume input graph is valid and populate graph object
             foreach (string data in input)
             {
                 List<int> neighbors = data.Split('\t').ToList().Select(s => String.IsNullOrEmpty(s) ? 0 : Int32.Parse(s)).ToList();
@@ -38,18 +38,23 @@ namespace MinimumCut
 
             for (int i = 0; i < nIterations; i++)
             {
-                (int, bool) x = ComputeCuts(Graph);
+                (int, bool) x = ComputeCut(Graph);
                 if (x.Item2)
                     nCuts.Add(x.Item1);
             }
 
-            Console.Write("Minimum number of cuts caluculated in {0} iterations: {1} \n", nIterations, nCuts.Min());
+            Console.Write("Minimum number of crossing edges caluculated in {0} iterations: {1} \n", nIterations, nCuts.Min());
             Console.Write("Probablity: {0}% \n",((double) nCuts.Count(x => x == nCuts.Min()) * 100 / nIterations));
             Console.Write("Press any key to continue...");
             Console.Read();
         }
 
-        private static (int, bool) ComputeCuts(Dictionary<int, List<int>> graph)
+        /// <summary>
+        /// Calculate minimum cut iteratively
+        /// </summary>
+        /// <param name="graph">Dictionary representation of the graph</param>
+        /// <returns></returns>
+        private static (int, bool) ComputeCut(Dictionary<int, List<int>> graph)
         {
             // create a copy of the graph to work with since dictionaries cannot be passed by value
             Dictionary<int, List<int>> _graph = graph.ToDictionary(dwItem => dwItem.Key, dwItem => dwItem.Value.ToList());
@@ -69,19 +74,19 @@ namespace MinimumCut
                 nVertices = _graph.Count;
             }
 
-            int nCuts = _graph.First().Value.Count();
+            int nCrossingEdges = _graph.First().Value.Count();
 
             foreach (var item in _graph.Values)
             {
-                if (item.Count != nCuts)
-                    return (nCuts, false);
+                if (item.Count != nCrossingEdges)
+                    return (nCrossingEdges, false);
             }
 
-            return (nCuts, true);
+            return (nCrossingEdges, true);
         }
 
         /// <summary>
-        /// Contraction routine
+        /// Contraction routine for Karger's algorithm
         /// </summary>
         /// <param name="graph"></param>
         /// <param name="selectVertex">First vertex that will absorb the second vertex</param>
