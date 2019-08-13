@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quicksort", "Quicksort\Quic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimumCut", "MinimumCut\MinimumCut.csproj", "{F6A053E1-5093-46A5-A41E-321CD580E77A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCC", "SCC\SCC.csproj", "{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F6A053E1-5093-46A5-A41E-321CD580E77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6A053E1-5093-46A5-A41E-321CD580E77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6A053E1-5093-46A5-A41E-321CD580E77A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
