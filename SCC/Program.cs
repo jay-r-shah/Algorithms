@@ -56,7 +56,11 @@ namespace SCC
             DFS_Loop(true);
             SCCCount.Sort();
             SCCCount.Reverse();
-            Console.Write(string.Join(",", SCCCount));
+            if (SCCCount.Count() < 5)
+            {
+                SCCCount.AddRange(Enumerable.Repeat(0, 5).ToList());
+            }
+            Console.Write(string.Join(",", SCCCount.Take(5)));
             Console.Write("\n");
             Console.Read();
         }
