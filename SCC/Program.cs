@@ -15,7 +15,7 @@ namespace SCC
 
 
         private static List<(int, int)> newGraph = new List<(int, int)>(); // graph for 2nd pass
-        private static Dictionary<int, int> leaders = new Dictionary<int, int>();
+        //private static Dictionary<int, int> leaders = new Dictionary<int, int>();
         private static List<int> SCCCount = new List<int>();
         /// <summary>
         /// Solution to Week 1 programming assignment of the Graph Search, Shortest Paths, and Data Structures
@@ -45,12 +45,15 @@ namespace SCC
             }
             Console.Write("Number of nodes = {0} \n", nNodes);
             //Graph = new Dictionary<int, List<int>>();
-            DFS_Loop(Graph);
+            Console.Write("Starting DFS_Loop... \n");
+            DFS_Loop();
+            Console.Write("Post processing... \n");
             PostProcessFinishingTime(finishingTime, ref newGraph);
-            leaders.Clear();
+            //leaders.Clear();
             exploredNodes.Clear();
             finishingTime.Clear();
-            DFS_Loop(newGraph, true);
+            Console.Write("Starting DFS_Loop... \n");
+            DFS_Loop(true);
             SCCCount.Sort();
             SCCCount.Reverse();
             Console.Write(string.Join(",", SCCCount));
@@ -66,9 +69,11 @@ namespace SCC
             {
                 newGraph.Add((finishingTime[arc.Item2],finishingTime[arc.Item1]));
             }
+            Graph = newGraph.ToList();
+            newGraph.Clear();
         }
 
-        private static void DFS_Loop(List<(int, int)> graph, bool countSCCs = false)
+        private static void DFS_Loop(bool countSCCs = false)
         {
             int t = 0; //# of variables processed so far
             int tStart = t;
@@ -79,7 +84,7 @@ namespace SCC
                 if (!exploredNodes.Contains(i))
                 {
                     S = i;
-                    DFS(graph, i, ref S, ref t);
+                    DFS(i, ref S, ref t);
                     if (countSCCs)
                     {
                         SCCCount.Add(t - tStart);
@@ -89,20 +94,23 @@ namespace SCC
             }
         }
 
-        private static void DFS(List<(int, int)> graph, int i, ref int S, ref int t)
+        private static void DFS(int i, ref int S, ref int t)
         {
             exploredNodes.Add(i);
-            leaders.Add(i, S);
-            foreach (var arc in graph.Where(x => x.Item1 == i))
+            Stack<int> stack = new Stack<int>();
+            stack.Push(i); // start vertex
+
+            while (stack.Count() > 0)
             {
-                int j = arc.Item2;
-                if (!exploredNodes.Contains(j))
+                int v = stack.Pop();
+                var edges = Graph.Where(x => x.Item1 == v);
+                foreach (var edge in edges)
                 {
-                    DFS(graph, j, ref S, ref t);
+                    int w = edge.Item2;
+                    if (!exploredNodes.Add(w)) continue;
+                    stack.Push(w);
                 }
             }
-            t++;
-            finishingTime.Add(i, t);
         }
     }
 }
