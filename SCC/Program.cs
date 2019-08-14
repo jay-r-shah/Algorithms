@@ -96,19 +96,35 @@ namespace SCC
 
         private static void DFS(int i, ref int S, ref int t)
         {
-            exploredNodes.Add(i);
+            //exploredNodes.Add(i);
             Stack<int> stack = new Stack<int>();
             stack.Push(i); // start vertex
 
             while (stack.Count() > 0)
             {
                 int v = stack.Pop();
-                var edges = Graph.Where(x => x.Item1 == v);
-                foreach (var edge in edges)
+                if (!exploredNodes.Contains(v))
                 {
-                    int w = edge.Item2;
-                    if (!exploredNodes.Add(w)) continue;
-                    stack.Push(w);
+                    exploredNodes.Add(v);
+                    stack.Push(v);
+                    var edges = Graph.Where(x => x.Item1 == v);
+                    foreach (var edge in edges)
+                    {
+                        int w = edge.Item2;
+
+                        if (!exploredNodes.Contains(w))
+                        {
+                            stack.Push(w);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!finishingTime.TryGetValue(v, out int _))
+                    {
+                        t++;
+                        finishingTime.Add(v, t);
+                    }
                 }
             }
         }
