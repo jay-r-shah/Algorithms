@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +10,54 @@ namespace SCC
 {
     class Program
     {
+        public static void Main(string[] args)
+        {
+            string folder = @"C:\Users\SHAHJ\source\repos\stanford-algs\testCases\course2\assignment1SCC\";
+            DirectoryInfo dinfo = new DirectoryInfo(folder);
+            FileInfo[] Files = dinfo.GetFiles("*.txt");
+            int correct = 0;
+            int total = 0;
+            int totalInputFiles = Files.Count(x => x.Name.StartsWith("input"));
+            if (args[1] == "1")
+            {
+                foreach (var inputFile in Files.Where(x => x.Name.StartsWith("input")))
+                {
+                    total++;
+                    var start = Stopwatch.StartNew();
+                    var result = ComputeSCCs.Calculate(new string[] { inputFile.FullName });
+                    start.Stop();
+                    string outputFile = inputFile.FullName.Replace("input", "output");
+                    string expectedResult = System.IO.File.ReadAllText(outputFile).Trim();
+                    if (result.Item1 == expectedResult)
+                    {
+                        correct++;
+                    }
+                    Console.Write("Correct = {0:F2}% \t {1}/{2} \t nNodes = {3} \t time = {4:F2}", (double)correct * 100 / total, total, totalInputFiles, result.Item2, (double)start.ElapsedMilliseconds / 1000);
+                    Console.Write("\t{0} \n", result.Item1 == expectedResult);
+                }
+            }
+
+            var start1 = Stopwatch.StartNew();
+            Console.Write(ComputeSCCs.Calculate(args).Item1);
+            start1.Stop();
+            Console.Write("\n time={0:F4}", (double)start1.ElapsedMilliseconds / 1000);
+            Console.Read();
+
+        }
+    }
+
+    public static class ComputeSCCs
+    {
         private static List<(int, int)> Graph = new List<(int, int)>(); // reversed graph
+        private static Dictionary<int, List<(int, int)>> edges = new Dictionary<int, List<(int, int)>>();
         private static int nNodes = 0;
         private static HashSet<int> exploredNodes = new HashSet<int>();
         private static Dictionary<int, int> finishingTime = new Dictionary<int, int>();
 
-
+        private static List<bool> visited = new List<bool>();
         private static List<(int, int)> newGraph = new List<(int, int)>(); // graph for 2nd pass
-        //private static Dictionary<int, int> leaders = new Dictionary<int, int>();
         private static List<int> SCCCount = new List<int>();
+        
         /// <summary>
         /// Solution to Week 1 programming assignment of the Graph Search, Shortest Paths, and Data Structures
         /// course.
@@ -26,9 +67,16 @@ namespace SCC
         /// --------------------------------------------------------------------------------------------------
         /// </summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        public static (string,int) Calculate(string[] args)
         {
             List<string> input = System.IO.File.ReadAllLines(args[0]).ToList();
+            SCCCount.Clear();
+            Graph.Clear();
+            nNodes = 0;
+            exploredNodes.Clear();
+            finishingTime.Clear();
+            newGraph.Clear();
+            edges.Clear();
             foreach (var item in input)
             {
                 int tail = Convert.ToInt32(item.Split(' ')[0]);
@@ -42,17 +90,22 @@ namespace SCC
                     nNodes = head;
                 }
                 Graph.Add((head, tail)); // reverse the graph
+                if (!edges.TryGetValue(head, out var _))
+                {
+                    edges.Add(head, new List<(int, int)>() { (head, tail) });
+                }
+                else
+                {
+                    edges[head].Add((head, tail));
+                }
             }
-            Console.Write("Number of nodes = {0} \n", nNodes);
-            //Graph = new Dictionary<int, List<int>>();
-            Console.Write("Starting DFS_Loop... \n");
+            visited = Enumerable.Repeat(false, nNodes).ToList();
             DFS_Loop();
-            Console.Write("Post processing... \n");
+            edges.Clear();
             PostProcessFinishingTime(finishingTime, ref newGraph);
-            //leaders.Clear();
+            visited = Enumerable.Repeat(false, nNodes).ToList();
             exploredNodes.Clear();
             finishingTime.Clear();
-            Console.Write("Starting DFS_Loop... \n");
             DFS_Loop(true);
             SCCCount.Sort();
             SCCCount.Reverse();
@@ -60,9 +113,7 @@ namespace SCC
             {
                 SCCCount.AddRange(Enumerable.Repeat(0, 5).ToList());
             }
-            Console.Write(string.Join(",", SCCCount.Take(5)));
-            Console.Write("\n");
-            Console.Read();
+            return (string.Join(",", SCCCount.Take(5)), nNodes);
         }
 
         private static void PostProcessFinishingTime(Dictionary<int, int> finishingTime, ref List<(int, int)> newGraph)
@@ -72,6 +123,14 @@ namespace SCC
             foreach (var arc in Graph)
             {
                 newGraph.Add((finishingTime[arc.Item2],finishingTime[arc.Item1]));
+                if (!edges.TryGetValue(finishingTime[arc.Item2], out var _))
+                {
+                    edges.Add(finishingTime[arc.Item2], new List<(int, int)>() { (finishingTime[arc.Item2], finishingTime[arc.Item1]) });
+                }
+                else
+                {
+                    edges[finishingTime[arc.Item2]].Add((finishingTime[arc.Item2], finishingTime[arc.Item1]));
+                }
             }
             Graph = newGraph.ToList();
             newGraph.Clear();
@@ -85,7 +144,7 @@ namespace SCC
 
             for (int i = nNodes + 1; i-- > 1;)
             {
-                if (!exploredNodes.Contains(i))
+                if (!visited[i - 1]) // !visited[i - 1]
                 {
                     S = i;
                     DFS(i, ref S, ref t);
@@ -107,18 +166,20 @@ namespace SCC
             while (stack.Count() > 0)
             {
                 int v = stack.Pop();
-                if (!exploredNodes.Contains(v))
+                if (!visited[v - 1])
                 {
-                    exploredNodes.Add(v);
+                    visited[v - 1] = true;
                     stack.Push(v);
-                    var edges = Graph.Where(x => x.Item1 == v);
-                    foreach (var edge in edges)
+                    if (edges.TryGetValue(v, out var edgeList))
                     {
-                        int w = edge.Item2;
-
-                        if (!exploredNodes.Contains(w))
+                        foreach (var edge in edgeList)
                         {
-                            stack.Push(w);
+                            int w = edge.Item2;
+
+                            if (!visited[w - 1])
+                            {
+                                stack.Push(w);
+                            }
                         }
                     }
                 }
