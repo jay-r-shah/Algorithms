@@ -20,4 +20,8 @@ input_{filename}.txt
 
 **Example:**
 
-SCC ..\..\test_SCC.txt 1 C:\Path\To\Test\Cases
+SCC ..\\..\test_SCC.txt 1 C:\Path\To\Test\Cases
+
+SCC ..\\..\test_SCC.txt 0
+
+SCC C:\Path\To\Test_SCC.txt 1
