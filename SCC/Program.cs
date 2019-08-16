@@ -12,27 +12,37 @@ namespace SCC
     {
         public static void Main(string[] args)
         {
-            string folder = @"C:\Users\jaysh\source\repos\stanford-algs\testCases\course2\assignment1SCC\";
+            string folder = @"C:\Users\SHAHJ\source\repos\stanford-algs\testCases\course2\assignment1SCC\";
             DirectoryInfo dinfo = new DirectoryInfo(folder);
             FileInfo[] Files = dinfo.GetFiles("*.txt");
             int correct = 0;
             int total = 0;
             int totalInputFiles = Files.Count(x => x.Name.StartsWith("input"));
-            foreach (var inputFile in Files.Where(x => x.Name.StartsWith("input")))
+            if (args[1] == "1")
             {
-                total++;
-                var start = Stopwatch.StartNew();
-                var result = ComputeSCCs.Calculate(new string[] { inputFile.FullName });
-                start.Stop();
-                string outputFile = inputFile.FullName.Replace("input", "output");
-                string expectedResult = System.IO.File.ReadAllText(outputFile).Trim();
-                if (result.Item1 == expectedResult)
+                foreach (var inputFile in Files.Where(x => x.Name.StartsWith("input")))
                 {
-                    correct++;
+                    total++;
+                    var start = Stopwatch.StartNew();
+                    var result = ComputeSCCs.Calculate(new string[] { inputFile.FullName });
+                    start.Stop();
+                    string outputFile = inputFile.FullName.Replace("input", "output");
+                    string expectedResult = System.IO.File.ReadAllText(outputFile).Trim();
+                    if (result.Item1 == expectedResult)
+                    {
+                        correct++;
+                    }
+                    Console.Write("Correct = {0:F2}% \t {1}/{2} \t nNodes = {3} \t time = {4:F2}", (double)correct * 100 / total, total, totalInputFiles, result.Item2, (double)start.ElapsedMilliseconds / 1000);
+                    Console.Write("\t{0} \n", result.Item1 == expectedResult);
                 }
-                Console.Write("Correct = {0:F2}% \t {1}/{2} \t nNodes = {3} \t time = {4:F2}", (double)correct * 100 / total, total, totalInputFiles, result.Item2, (double)start.ElapsedMilliseconds / 1000 / 60);
-                Console.Write("\t{0} \n", result.Item1 == expectedResult);
             }
+
+            var start1 = Stopwatch.StartNew();
+            Console.Write(ComputeSCCs.Calculate(args).Item1);
+            start1.Stop();
+            Console.Write("\n time={0:F4}", (double)start1.ElapsedMilliseconds / 1000);
+            Console.Read();
+
         }
     }
 
