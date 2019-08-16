@@ -10,15 +10,42 @@ namespace SCC
 {
     class Program
     {
+        /// <summary>
+        /// Solution to Week 1 programming assignment of the Graph Search, Shortest Paths, and Data Structures
+        /// course.
+        /// 
+        /// Compute the sizes of the five largest Strongly Connected Components (SCCs) of the given directed
+        /// graph.
+        /// 
+        /// Arguments:
+        /// ----------
+        /// 
+        /// 1. Path to text file representing the directed graph
+        /// 2. 0/1 flag indicating if test cases should be executed
+        /// 3. if 1 - path to test cases folder. If this is empty, the current working directory is assumed.
+        /// 
+        /// Test cases format:
+        /// input_{filename}.txt and output_{filename}.txt
+        /// where output_{filename}.txt is a text file containing the sizes of the five larges SCCs of the graph described in
+        /// input_{filename}.txt
+        /// 
+        /// --------------------------------------------------------------------------------------------------
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
-            string folder = @"C:\Users\SHAHJ\source\repos\stanford-algs\testCases\course2\assignment1SCC\";
+            string folder = "";
+            if (args.Count() > 2 && !string.IsNullOrEmpty(args[2]))
+                folder = args[2];
+            else
+                folder = Directory.GetCurrentDirectory();
+
             DirectoryInfo dinfo = new DirectoryInfo(folder);
             FileInfo[] Files = dinfo.GetFiles("*.txt");
             int correct = 0;
             int total = 0;
             int totalInputFiles = Files.Count(x => x.Name.StartsWith("input"));
-            if (args[1] == "1")
+            if (args.Count() > 1 && args[1] == "1")
             {
                 foreach (var inputFile in Files.Where(x => x.Name.StartsWith("input")))
                 {
@@ -38,9 +65,11 @@ namespace SCC
             }
 
             var start1 = Stopwatch.StartNew();
-            Console.Write(ComputeSCCs.Calculate(args).Item1);
+            var solution = ComputeSCCs.Calculate(args);
             start1.Stop();
-            Console.Write("\n time={0:F4}", (double)start1.ElapsedMilliseconds / 1000);
+            Console.Write("Solution = {0}", solution.Item1);
+            Console.Write("\t time={0:F2}s", (double)start1.ElapsedMilliseconds / 1000);
+            Console.Write("\t nNodes = {0} \n", solution.Item2);
             Console.Read();
 
         }
@@ -58,15 +87,6 @@ namespace SCC
         private static List<(int, int)> newGraph = new List<(int, int)>(); // graph for 2nd pass
         private static List<int> SCCCount = new List<int>();
         
-        /// <summary>
-        /// Solution to Week 1 programming assignment of the Graph Search, Shortest Paths, and Data Structures
-        /// course.
-        /// 
-        /// Compute the sizes of the five largest Strongly Connected Components (SCCs) of the given directed
-        /// graph.
-        /// --------------------------------------------------------------------------------------------------
-        /// </summary>
-        /// <param name="args"></param>
         public static (string,int) Calculate(string[] args)
         {
             List<string> input = System.IO.File.ReadAllLines(args[0]).ToList();
