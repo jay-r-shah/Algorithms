@@ -50,7 +50,10 @@ namespace Dijkstra
                     start.Stop();
                     string outputFile = inputFile.FullName.Replace("input", "output");
                     string expectedResult = System.IO.File.ReadAllText(outputFile).Trim();
-                    if (result.Item1 == expectedResult)
+                    string pathsFile = inputFile.FullName.Replace("input", "paths");
+                    Dictionary<int, List<int>> Paths = DijkstraShortestPath.ReadPathFile(pathsFile);
+                    bool pathsMatch = DijkstraShortestPath.ComparePaths(Paths, result.Item2);
+                    if (result.Item1 == expectedResult && pathsMatch)
                     {
                         correct++;
                     }
@@ -75,7 +78,7 @@ namespace Dijkstra
         private static int[] reqdVertices = new int[10] { 7, 37, 59, 82, 99, 115, 133, 165, 188, 197 };
         private static List<int> X = new List<int>(); //Vertices processed so far - initialized with start vertex 1
         private static Dictionary<int, int> A = new Dictionary<int, int>(); // computed shortest path distances per vertex
-
+        private static Dictionary<int, List<int>> B = new Dictionary<int, List<int>>();
         private static List<(int, int)> Graph = new List<(int, int)>(); // edges
 
         /// <summary>
@@ -86,7 +89,7 @@ namespace Dijkstra
         private static List<int> Lengths = new List<int>(); // List of path lengths corresponding to graph
         private static HashSet<int> Vertices = new HashSet<int>(); // set of vertices
 
-        internal static (string, int) Calculate(string filename)
+        internal static (string, Dictionary<int, List<int>>) Calculate(string filename)
         {
             List<string> input = System.IO.File.ReadAllLines(filename).ToList();
             Graph.Clear();
@@ -95,6 +98,7 @@ namespace Dijkstra
             Vertices.Clear();
             X.Clear();
             A.Clear();
+            B.Clear();
 
             foreach (var line in input)
             {
@@ -126,8 +130,8 @@ namespace Dijkstra
 
             int s = 1; // Start vertex;
             A.Add(s, 0);// initialize shortest path for start vertex;
+            B.Add(s, new List<int> { s });
             X.Add(s);
-
             while (X.Count != Vertices.Count())
             {
                 int minLength = 0;
@@ -155,6 +159,16 @@ namespace Dijkstra
 
                 X.Add(wstar);
                 A.Add(wstar, A[vstar] + minLength);
+                if (!B.TryGetValue(wstar, out List<int> path))
+                {
+                    path = B[vstar].ToList();
+                    path.Add(wstar);
+                    B.Add(wstar, path);
+                }
+                else
+                {
+                    path.AddRange(B[vstar]);
+                }
             }
 
             List<string> outputs = new List<string>();
@@ -164,7 +178,44 @@ namespace Dijkstra
                 outputs.Add(A[item].ToString());
             }
 
-            return (String.Join(",",outputs.ToArray()), 0);
+            return (String.Join(",",outputs.ToArray()), B);
+        }
+
+        internal static Dictionary<int, List<int>> ReadPathFile(string pathsFile)
+        {
+            List<string> input = System.IO.File.ReadAllLines(pathsFile).ToList();
+            Dictionary<int, List<int>> paths = new Dictionary<int, List<int>>();
+
+            foreach (var item in input)
+            {
+                var items = item.Split(' ');
+                paths.Add(Convert.ToInt32(items[0]), new List<int>());
+                foreach (var vertex in items.Skip(4))
+                {
+                    paths[Convert.ToInt32(items[0])].Add(Convert.ToInt32(vertex.Replace(",","")));
+                }
+            }
+
+            return paths;
+        }
+
+        internal static bool ComparePaths(Dictionary<int, List<int>> path1, Dictionary<int, List<int>> path2)
+        {
+            foreach (KeyValuePair<int, List<int>> item in path1)
+            {
+                var calcPath = path2[item.Key];
+                var actualPath = item.Value;
+                if (calcPath.Count() != actualPath.Count())
+                    return false;
+
+                for (int i = 0; i < calcPath.Count(); i++)
+                {
+                    if (calcPath[i] != actualPath[i])
+                        return false;
+                }
+
+            }
+            return true;
         }
     }
 }
