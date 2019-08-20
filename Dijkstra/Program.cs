@@ -52,12 +52,16 @@ namespace Dijkstra
                     string expectedResult = System.IO.File.ReadAllText(outputFile).Trim();
                     string pathsFile = inputFile.FullName.Replace("input", "paths");
                     Dictionary<int, List<int>> Paths = DijkstraShortestPath.ReadPathFile(pathsFile);
-                    bool pathsMatch = DijkstraShortestPath.ComparePaths(Paths, result.Item2);
-                    if (result.Item1 == expectedResult && pathsMatch)
+                    bool pathsMatchOrBetter = DijkstraShortestPath.ComparePaths(Paths, result.Item2);
+                    if (result.Item1 == expectedResult && pathsMatchOrBetter)
                     {
                         correct++;
                     }
-                    Console.Write("Correct = {0:F2}% \t {1}/{2} \t nNodes = {3} \t time = {4:F2}", (double)correct * 100 / total, total, totalInputFiles, result.Item2, (double)start.ElapsedMilliseconds / 1000);
+                    else if (result.Item1 != expectedResult && pathsMatchOrBetter)
+                    {
+                        correct++;
+                    }
+                    Console.Write("Correct or better = {0:F2}% \t {1}/{2} \t nNodes = {3} \t time = {4:F2}", (double)correct * 100 / total, total, totalInputFiles, result.Item2.Count(), (double)start.ElapsedMilliseconds / 1000);
                     Console.Write("\t{0} \n", result.Item1 == expectedResult);
                 }
             }
@@ -144,7 +148,7 @@ namespace Dijkstra
                     foreach ((int, int) edge in edgeList.Value.Where(x => !X.Contains(x.Item2)))
                     {
                         tempCriterion = A[edge.Item1] + Lengths[Graph.IndexOf(edge)];
-                        if (tempCriterion < criterion)
+                        if (tempCriterion <= criterion)
                         {
                             criterion = tempCriterion;
                             minEdge = edge;
@@ -156,7 +160,10 @@ namespace Dijkstra
 
                 int vstar, wstar;
                 (vstar, wstar) = minEdge;
-
+                if (minEdge == (0,0))
+                {
+                    break;
+                }
                 X.Add(wstar);
                 A.Add(wstar, A[vstar] + minLength);
                 if (!B.TryGetValue(wstar, out List<int> path))
@@ -205,13 +212,35 @@ namespace Dijkstra
             {
                 var calcPath = path2[item.Key];
                 var actualPath = item.Value;
+                int calcLength = 0;
+                int actualLength = 0;
+                for (int i = 0; i < calcPath.Count() - 1; i++)
+                {
+                    calcLength += Lengths[Graph.IndexOf((calcPath[i], calcPath[i + 1]))];
+                }
+                for (int i = 0; i < actualPath.Count() - 1; i++)
+                {
+                    actualLength += Lengths[Graph.IndexOf((actualPath[i], actualPath[i + 1]))];
+                }
                 if (calcPath.Count() != actualPath.Count())
-                    return false;
-
+                {
+                    if (actualLength < calcLength)
+                    {
+                        return false;
+                    }
+                }
+                bool differentPaths = false;
                 for (int i = 0; i < calcPath.Count(); i++)
                 {
                     if (calcPath[i] != actualPath[i])
-                        return false;
+                    {
+                        differentPaths = true;
+                        break;
+                    }
+                }
+                if (differentPaths && actualLength < calcLength)
+                {
+                    return false;
                 }
 
             }
