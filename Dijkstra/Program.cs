@@ -46,7 +46,7 @@ namespace Dijkstra
                 {
                     total++;
                     var start = Stopwatch.StartNew();
-                    var result = DijkstraShortestPath.Calculate(new string[] { inputFile.FullName });
+                    var result = DijkstraShortestPath.Calculate( inputFile.FullName );
                     start.Stop();
                     string outputFile = inputFile.FullName.Replace("input", "output");
                     string expectedResult = System.IO.File.ReadAllText(outputFile).Trim();
@@ -58,14 +58,113 @@ namespace Dijkstra
                     Console.Write("\t{0} \n", result.Item1 == expectedResult);
                 }
             }
+
+            var start1 = Stopwatch.StartNew();
+            var solution = DijkstraShortestPath.Calculate(args[0]);
+            start1.Stop();
+            Console.Write("Solution = {0}", solution.Item1);
+            Console.Write("\t time={0:F2}s", (double)start1.ElapsedMilliseconds / 1000);
+            Console.Write("\t nNodes = {0} \n", solution.Item2);
+            Console.Read();
+
         }
     }
 
     public static class DijkstraShortestPath
     {
-        internal static (string,int) Calculate(string[] args)
+        private static int[] reqdVertices = new int[10] { 7, 37, 59, 82, 99, 115, 133, 165, 188, 197 };
+        private static List<int> X = new List<int>(); //Vertices processed so far - initialized with start vertex 1
+        private static Dictionary<int, int> A = new Dictionary<int, int>(); // computed shortest path distances per vertex
+
+        private static List<(int, int)> Graph = new List<(int, int)>(); // edges
+
+        /// <summary>
+        /// mapping of edges that start from vertex key
+        /// </summary>
+        private static Dictionary<int, List<(int, int)>> edges = new Dictionary<int, List<(int, int)>>();
+
+        private static List<int> Lengths = new List<int>(); // List of path lengths corresponding to graph
+        private static HashSet<int> Vertices = new HashSet<int>(); // set of vertices
+
+        internal static (string, int) Calculate(string filename)
         {
-            throw new NotImplementedException();
+            List<string> input = System.IO.File.ReadAllLines(filename).ToList();
+            Graph.Clear();
+            edges.Clear();
+            Lengths.Clear();
+            Vertices.Clear();
+            X.Clear();
+            A.Clear();
+
+            foreach (var line in input)
+            {
+                string[] items = line.Split('\t');
+                int tail = Convert.ToInt32(items[0]);
+                Vertices.Add(tail);
+                for (int i = 1; i < items.Count(); i++)
+                {
+                    var head = items[i].Split(',');
+                    if (String.IsNullOrEmpty(head[0]))
+                    {
+                        continue;
+                    }
+                    int headVertex = Convert.ToInt32(head[0]);
+                    int length = Convert.ToInt32(head[1]);
+                    Graph.Add((tail, headVertex));
+                    Lengths.Add(length);
+                    Vertices.Add(headVertex);
+                    if (!edges.TryGetValue(tail, out var _))
+                    {
+                        edges.Add(tail, new List<(int, int)>() { (tail, headVertex) });
+                    }
+                    else
+                    {
+                        edges[tail].Add((tail, headVertex));
+                    }
+                }
+            }
+
+            int s = 1; // Start vertex;
+            A.Add(s, 0);// initialize shortest path for start vertex;
+            X.Add(s);
+
+            while (X.Count != Vertices.Count())
+            {
+                int minLength = 0;
+                int criterion = Int32.MaxValue;
+                (int, int) minEdge = (0, 0);
+                
+                foreach (KeyValuePair<int, List<(int, int)>> edgeList in edges.Where(x => X.Contains(x.Key))) // edges that start in X
+                {
+                    int tempCriterion;
+                    foreach ((int, int) edge in edgeList.Value.Where(x => !X.Contains(x.Item2)))
+                    {
+                        tempCriterion = A[edge.Item1] + Lengths[Graph.IndexOf(edge)];
+                        if (tempCriterion < criterion)
+                        {
+                            criterion = tempCriterion;
+                            minEdge = edge;
+                            minLength = Lengths[Graph.IndexOf(edge)];
+                        }
+
+                    }
+                }
+
+                int vstar, wstar;
+                (vstar, wstar) = minEdge;
+
+                X.Add(wstar);
+                A.Add(wstar, A[vstar] + minLength);
+            }
+
+            List<string> outputs = new List<string>();
+
+            foreach (int item in reqdVertices)
+            {
+                outputs.Add(A[item].ToString());
+            }
+
+            return (String.Join(",",outputs.ToArray()), 0);
         }
     }
 }
