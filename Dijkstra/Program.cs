@@ -71,7 +71,7 @@ namespace Dijkstra
             start1.Stop();
             Console.Write("Solution = {0}", solution.Item1);
             Console.Write("\t time={0:F2}s", (double)start1.ElapsedMilliseconds / 1000);
-            Console.Write("\t nNodes = {0} \n", solution.Item2);
+            Console.Write("\t nNodes = {0} \n", solution.Item2.Count());
             Console.Read();
 
         }
