@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimumCut", "MinimumCut\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCC", "SCC\SCC.csproj", "{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstra", "Dijkstra\Dijkstra.csproj", "{08FD287A-B626-48DB-B1C7-81D79AE0B349}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF94A2D4-C454-4EF5-80BA-24EB80BA7E54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
