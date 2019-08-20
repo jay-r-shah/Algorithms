@@ -14,3 +14,5 @@ Week 4: Find the minimum cut of a connected graph using Karger's algorithm
 ## Course 2: Graph Search, Shortest Paths, and Data Structures
 
 Week 1: Compute the top 5 Strongly Connected Components (SCCs) of the given directed graph.
+
+Week 2: Compute shortest paths to each vertex of the directed graph with Dijkstra's algorithm.
