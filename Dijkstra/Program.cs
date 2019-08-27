@@ -160,7 +160,7 @@ namespace Dijkstra
 
                 int vstar, wstar;
                 (vstar, wstar) = minEdge;
-                if (minEdge == (0,0))
+                if (minEdge.Item1 == 0 && minEdge.Item2 == 0)
                 {
                     break;
                 }

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SCC", "SCC\SCC.csproj", "{E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstra", "Dijkstra\Dijkstra.csproj", "{08FD287A-B626-48DB-B1C7-81D79AE0B349}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedianMaintenance", "MedianMaintenance\MedianMaintenance.csproj", "{77ECA1F9-5716-482D-B52B-3323845502C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08FD287A-B626-48DB-B1C7-81D79AE0B349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77ECA1F9-5716-482D-B52B-3323845502C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77ECA1F9-5716-482D-B52B-3323845502C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77ECA1F9-5716-482D-B52B-3323845502C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77ECA1F9-5716-482D-B52B-3323845502C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
