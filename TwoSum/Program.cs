@@ -59,26 +59,34 @@ namespace TwoSum
                 int twoSums = 0;
 
                 List<long> input = System.IO.File.ReadAllLines(args[0]).ToList().Select(Int64.Parse).ToList();
+                H.Clear();
+                List<bool> Tset = new List<bool>();
                 for (int t = -10000; t < 10001; t++)
                 {
-                    H.Clear();
-                    int i = 1;
-                    foreach (long val in input)
+                    Tset.Add(false);
+                }
+                int i = 1;
+                foreach (long val in input)
+                {
+                    if (!H.ContainsKey(val))
                     {
-                        if (!H.ContainsKey(val))
+                        H.Add(val, i);
+                        i++;
+                        for (int t = -10000; t < 10001; t++)
                         {
-                            H.Add(val, i);
-                            i++;
+                            if (Tset[t + 10000])
+                            {
+                                continue;
+                            }
                             if (H.Contains(t - val) && t != val)
                             {
-                                twoSums++;
-                                break;
+                                Tset[t + 10000] = true;
+                                //break;
                             }
-                            //Console.Write("{0} \t {1} \n", i, twoSums);
                         }
                     }
                 }
-
+                twoSums = Tset.Count(x => x);
 
                 //for (int t = -10000; t < 10001; t++)
                 //{
