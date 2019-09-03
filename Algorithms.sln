@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dijkstra", "Dijkstra\Dijkst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedianMaintenance", "MedianMaintenance\MedianMaintenance.csproj", "{77ECA1F9-5716-482D-B52B-3323845502C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwoSum", "TwoSum\TwoSum.csproj", "{B22F57A3-CB64-4696-8138-C173E7125395}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{77ECA1F9-5716-482D-B52B-3323845502C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77ECA1F9-5716-482D-B52B-3323845502C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77ECA1F9-5716-482D-B52B-3323845502C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22F57A3-CB64-4696-8138-C173E7125395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22F57A3-CB64-4696-8138-C173E7125395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22F57A3-CB64-4696-8138-C173E7125395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22F57A3-CB64-4696-8138-C173E7125395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
