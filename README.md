@@ -16,3 +16,7 @@ Week 4: Find the minimum cut of a connected graph using Karger's algorithm
 Week 1: Compute the top 5 Strongly Connected Components (SCCs) of the given directed graph.
 
 Week 2: Compute shortest paths to each vertex of the directed graph with Dijkstra's algorithm.
+
+Week 3: Heap-based implementation of median maintance algorithm.
+
+Week 4: Solution to the Two Sum problem using HashTables.
