@@ -10,6 +10,28 @@ namespace MedianMaintenance
 {
     class Program
     {
+        /// <summary>
+        /// Solution to Week 3 programming assignment of the Graph Search, Shortest Paths, and Data Structures
+        /// course.
+        /// 
+        /// Implementation of Median Maintenance algorithm. Output the sum the medians, modulo 10000 (i.e. only
+        /// the last four digits.
+        /// 
+        /// Arguments:
+        /// ----------
+        /// 
+        /// 1. Path to text file representing the directed graph
+        /// 2. 0/1 flag indicating if test cases should be executed
+        /// 3. if 1 - path to test cases folder. If this is empty, the current working directory is assumed.
+        /// 
+        /// Test cases format:
+        /// input_{filename}.txt and output_{filename}.txt
+        /// where output_{filename}.txt is a text file containing the sizes of the five larges SCCs of the graph described in
+        /// input_{filename}.txt
+        /// 
+        /// --------------------------------------------------------------------------------------------------
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             string folder = "";
@@ -65,18 +87,6 @@ namespace MedianMaintenance
                 Hhigh = new MinHeap(highItems);
                 Medians.Add(input[0]);
                 Hhigh.Insert(input[0]);
-                //if (input[0] < input[1])
-                //{
-                //    Hlow.Insert(input[0]);
-                //    Hhigh.Insert(input[1]);
-                //}
-                //else
-                //{
-                //    Hlow.Insert(input[1]);
-                //    Hhigh.Insert(input[0]);
-                //}
-                //Medians.Add(Hlow.Extract_Max());
-                //Medians.Add(Hhigh.Extract_Min());
 
                 int count = 1;
                 foreach (int item in input.Skip(1))

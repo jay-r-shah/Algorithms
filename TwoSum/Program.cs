@@ -11,6 +11,28 @@ namespace TwoSum
 {
     class Program
     {
+        /// <summary>
+        /// Solution to Week 4 programming assignment of the Graph Search, Shortest Paths, and Data Structures
+        /// course.
+        /// 
+        /// Compute the number of target values t in the interval [-10000,10000] (inclusive) such that there 
+        /// are distinct numbers x,y in the input file that satisfy x + y = t. 
+        /// 
+        /// Arguments:
+        /// ----------
+        /// 
+        /// 1. Path to text file representing the directed graph
+        /// 2. 0/1 flag indicating if test cases should be executed
+        /// 3. if 1 - path to test cases folder. If this is empty, the current working directory is assumed.
+        /// 
+        /// Test cases format:
+        /// input_{filename}.txt and output_{filename}.txt
+        /// where output_{filename}.txt is a text file containing the sizes of the five larges SCCs of the graph described in
+        /// input_{filename}.txt
+        /// 
+        /// --------------------------------------------------------------------------------------------------
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             string folder = "";
@@ -81,53 +103,12 @@ namespace TwoSum
                             if (H.Contains(t - val) && t != val)
                             {
                                 Tset[t + 10000] = true;
-                                //break;
                             }
                         }
                     }
                 }
                 twoSums = Tset.Count(x => x);
 
-                //for (int t = -10000; t < 10001; t++)
-                //{
-                //    Console.Write("{0} \n", t);
-                //    int i = 1;
-                //    H.Clear();
-                //    foreach (long val in input)
-                //    {
-                //        if (!H.ContainsKey(val))
-                //        {
-                //            H.Add(val, i);
-                //            i++;
-                //            if (H.ContainsKey(t - val) && t != val)
-                //            {
-                //                twoSums++;
-                //                break;
-                //            }
-                //        }
-                //    }
-                //}
-
-
-
-                //while ((line = file.ReadLine()) != null)
-                //{
-                //    long val = Int64.Parse(line);
-                //    if (!H.ContainsKey(val))
-                //    {
-                //        H.Add(val, i);
-                //        i++;
-                //        for (int t = -10000; t < 10001; t++)
-                //        {
-                //            if (H.ContainsKey(t - val) && t != val)
-                //            {
-                //                twoSums++;
-                //                //break;
-                //            }
-                //        }
-                //    }
-                //}
-                //}
                 return (twoSums, input.Count());
             }
         }
