@@ -65,18 +65,6 @@ namespace MedianMaintenance
                 Hhigh = new MinHeap(highItems);
                 Medians.Add(input[0]);
                 Hhigh.Insert(input[0]);
-                //if (input[0] < input[1])
-                //{
-                //    Hlow.Insert(input[0]);
-                //    Hhigh.Insert(input[1]);
-                //}
-                //else
-                //{
-                //    Hlow.Insert(input[1]);
-                //    Hhigh.Insert(input[0]);
-                //}
-                //Medians.Add(Hlow.Extract_Max());
-                //Medians.Add(Hhigh.Extract_Min());
 
                 int count = 1;
                 foreach (int item in input.Skip(1))
@@ -125,13 +113,40 @@ namespace MedianMaintenance
             }
         }
 
-        public class MinHeap
+        public class Heap
         {
-            Dictionary<int, int> Items;
+            public Dictionary<int, int> Items;
 
-            public MinHeap(Dictionary<int, int> items)
+            public Heap(Dictionary<int, int> items)
             {
                 Items = items ?? throw new ArgumentNullException(nameof(items));
+            }
+
+            internal int RecalculateMax()
+            {
+                if (Items.Values.Count() == 0)
+                {
+                    return 0;
+                }
+                return Items.Values.Max();
+            }
+
+            internal int RecalculateMin()
+            {
+                if (Items.Values.Count() == 0)
+                {
+                    return 999999999;
+                }
+                return Items.Values.Min();
+            }
+        }
+
+        public class MinHeap : Heap
+        {
+            int Min { get; set; }
+
+            public MinHeap(Dictionary<int, int> items) : base(items)
+            {
             }
 
             public int Extract_Min()
@@ -140,7 +155,7 @@ namespace MedianMaintenance
                 {
                     return 999999999;
                 }
-                return Items.Values.Min();
+                return Min;
             }
 
             public int Insert(int item)
@@ -148,19 +163,23 @@ namespace MedianMaintenance
                 if (Items.Count() == 0)
                 {
                     Items.Add(0, item);
+                    Min = item;
                 }
                 else
                 {
-                    Items.Add(Items.Keys.Max() + 1 ,item);
+                    Items.Add(Items.Keys.Max() + 1, item);
+                    if (item < Min)
+                        Min = item;
                 }
                 return Items.Keys.Max();
             }
 
             public int Delete()
             {
-                int minVal = Items.Values.Min();
+                int minVal = Min;
                 int minKey = Items.First(x => x.Value == minVal).Key;
                 Items.Remove(minKey);
+                Min = base.RecalculateMin();
                 return minVal;
             }
 
@@ -170,13 +189,12 @@ namespace MedianMaintenance
             }
         }
 
-        public class MaxHeap
+        public class MaxHeap : Heap
         {
-            Dictionary<int, int> Items;
+            int Max { get; set; }
 
-            public MaxHeap(Dictionary<int, int> items)
+            public MaxHeap(Dictionary<int, int> items) : base(items)
             {
-                Items = items ?? throw new ArgumentNullException(nameof(items));
             }
 
             public int Extract_Max()
@@ -185,7 +203,7 @@ namespace MedianMaintenance
                 {
                     return 0;
                 }
-                return Items.Values.Max();
+                return Max;
             }
 
             public int Insert(int item)
@@ -193,19 +211,24 @@ namespace MedianMaintenance
                 if (Items.Count() == 0)
                 {
                     Items.Add(0, item);
+                    Max = item;
                 }
                 else
                 {
                     Items.Add(Items.Keys.Max() + 1, item);
+                    if (item > Max)
+                        Max = item;
                 }
+
                 return Items.Keys.Max();
             }
 
             public int Delete()
             {
-                int maxVal = Items.Values.Max();
+                int maxVal = Max;
                 int maxKey = Items.First(x => x.Value == maxVal).Key;
                 Items.Remove(maxKey);
+                Max = base.RecalculateMax();
                 return maxVal;
             }
 
